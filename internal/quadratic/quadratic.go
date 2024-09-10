@@ -13,17 +13,14 @@ type QuadraticEquation struct {
 	UndefinedVariable   string
 }
 
-func New(coefficient map[string]string, undefinedVariable string) (*QuadraticEquation, error) {
+func New(coefficient map[string]float64, undefinedVariable string) (*QuadraticEquation, error) {
 	if coeff := len(coefficient); coeff != 3 {
-		return nil, fmt.Errorf("not enough coefficient. Need 3, got %d", coeff)
+		return nil, fmt.Errorf("need 3 coefficients, got %d", coeff)
 	}
 	coeff := make(Coefficient, 3)
 
 	for k, v := range coefficient {
-		d, err := decimal.NewFromString(v)
-		if err != nil {
-			return nil, fmt.Errorf("cannot parse coef %v: %v", v, err)
-		}
+		d := decimal.NewFromFloat(v)
 		coeff[k] = d
 	}
 
