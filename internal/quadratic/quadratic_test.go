@@ -21,7 +21,7 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 		expectedErr error
 	}{
 		{
-			caseName: "success create",
+			caseName: "Success create with positive floats",
 			coefs:    [3]float64{2.1, 2.0, 0},
 			undefVar: "x",
 			expectedEq: &quadratic.QuadraticEquation{
@@ -30,10 +30,9 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 				C:                 decimal.NewFromFloat(0),
 				UndefinedVariable: "x",
 			},
-			expectedErr: nil,
 		},
 		{
-			caseName: "success create with point",
+			caseName: "success create with negative coefficient",
 			coefs:    [3]float64{123.90, 1.1, -90.2},
 			undefVar: "x",
 			expectedEq: &quadratic.QuadraticEquation{
@@ -42,7 +41,6 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 				C:                 decimal.NewFromFloat(-90.2),
 				UndefinedVariable: "x",
 			},
-			expectedErr: nil,
 		},
 	}
 
