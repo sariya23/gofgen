@@ -74,7 +74,7 @@ func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 		expectedErr error
 	}{
 		{
-			caseName:    "coef by x^2 is zero. Error",
+			caseName:    "Lead term is zero",
 			coefs:       [3]float64{0.0, -3.1, 4.9},
 			undefVar:    "x",
 			expectedEq:  nil,
