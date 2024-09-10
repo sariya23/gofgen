@@ -15,35 +15,31 @@ import (
 func TestCreateNewEquationSuccess(t *testing.T) {
 	testCases := []struct {
 		caseName    string
-		coefs       map[string]float64
+		coefs       [3]float64
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
 		expectedErr error
 	}{
 		{
 			caseName: "success create",
-			coefs:    map[string]float64{"a": 2.0, "b": 3.0, "c": 4.0},
+			coefs:    [3]float64{2.1, 2.0, 0},
 			undefVar: "x",
 			expectedEq: &quadratic.QuadraticEquation{
-				EquationCoefficient: map[string]decimal.Decimal{
-					"a": decimal.NewFromFloat(2.0),
-					"b": decimal.NewFromFloat(3.0),
-					"c": decimal.NewFromFloat(4.0),
-				},
+				A:                 decimal.NewFromFloat(2.1),
+				B:                 decimal.NewFromFloat(2.0),
+				C:                 decimal.NewFromFloat(0),
 				UndefinedVariable: "x",
 			},
 			expectedErr: nil,
 		},
 		{
 			caseName: "success create with point",
-			coefs:    map[string]float64{"a": 2.2, "b": -3.1, "c": 4.9},
+			coefs:    [3]float64{123.90, 1.1, -90.2},
 			undefVar: "x",
 			expectedEq: &quadratic.QuadraticEquation{
-				EquationCoefficient: map[string]decimal.Decimal{
-					"a": decimal.NewFromFloat(2.2),
-					"b": decimal.NewFromFloat(-3.1),
-					"c": decimal.NewFromFloat(4.9),
-				},
+				A:                 decimal.NewFromFloat(123.90),
+				B:                 decimal.NewFromFloat(1.1),
+				C:                 decimal.NewFromFloat(-90.2),
 				UndefinedVariable: "x",
 			},
 			expectedErr: nil,
@@ -69,31 +65,17 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 func TestCreateNewQuadraticNegative(t *testing.T) {
 	testCases := []struct {
 		caseName    string
-		coefs       map[string]float64
+		coefs       [3]float64
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
 		expectedErr error
 	}{
 		{
 			caseName:    "coef by x^2 is zero. Error",
-			coefs:       map[string]float64{"a": 0, "b": -3.1, "c": 4.9},
+			coefs:       [3]float64{0.0, -3.1, 4.9},
 			undefVar:    "x",
 			expectedEq:  nil,
 			expectedErr: fmt.Errorf("coefficient at the leading term is zero"),
-		},
-		{
-			caseName:    "To much coefs",
-			coefs:       map[string]float64{"a": 0, "b": -3.1, "c": 4.9, "d": 3.3},
-			undefVar:    "x",
-			expectedEq:  nil,
-			expectedErr: fmt.Errorf("need 3 coefficients, got %d", 4),
-		},
-		{
-			caseName:    "No enough coefs",
-			coefs:       map[string]float64{"a": 0},
-			undefVar:    "x",
-			expectedEq:  nil,
-			expectedErr: fmt.Errorf("need 3 coefficients, got %d", 1),
 		},
 	}
 

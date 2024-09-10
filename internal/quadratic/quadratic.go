@@ -6,23 +6,26 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-type Coefficient = map[string]decimal.Decimal
-
 type QuadraticEquation struct {
-	EquationCoefficient Coefficient
-	UndefinedVariable   string
+	A, B, C           decimal.Decimal
+	UndefinedVariable string
 }
 
-func New(coefficient map[string]float64, undefinedVariable string) (*QuadraticEquation, error) {
-	if coeff := len(coefficient); coeff != 3 {
-		return nil, fmt.Errorf("need 3 coefficients, got %d", coeff)
-	}
-	coeff := make(Coefficient, 3)
+func New(coefficient [3]float64, undefinedVariable string) (*QuadraticEquation, error) {
+	coeff := [...]decimal.Decimal{decimal.NewFromFloat(0), decimal.NewFromFloat(0), decimal.NewFromFloat(0)}
 
-	for k, v := range coefficient {
-		d := decimal.NewFromFloat(v)
-		coeff[k] = d
+	for i := 0; i < 3; i++ {
+		d := decimal.NewFromFloat(coefficient[i])
+		coeff[i] = d
 	}
 
-	return &QuadraticEquation{EquationCoefficient: coeff, UndefinedVariable: undefinedVariable}, nil
+	if isLeadTermIsZero(coeff) {
+		return nil, fmt.Errorf("coefficient at the leading term is zero")
+	}
+
+	return &QuadraticEquation{A: coeff[0], B: coeff[1], C: coeff[2], UndefinedVariable: undefinedVariable}, nil
+}
+
+func isLeadTermIsZero(coefficient [3]decimal.Decimal) bool {
+	return coefficient[0].Equal(decimal.NewFromFloat(0))
 }
