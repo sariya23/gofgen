@@ -66,31 +66,23 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 // что квадратное уравнение не создаться, если коэффициент при старшем
 // члене 0.
 func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
-	testCases := []struct {
+	testCase := struct {
 		caseName    string
 		coefs       [3]float64
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
 		expectedErr error
 	}{
-		{
-			caseName:    "Lead term is zero",
-			coefs:       [3]float64{0.0, -3.1, 4.9},
-			undefVar:    "x",
-			expectedEq:  nil,
-			expectedErr: fmt.Errorf("coefficient at the leading term is zero"),
-		},
+		coefs:       [3]float64{0.0, -3.1, 4.9},
+		undefVar:    "x",
+		expectedErr: fmt.Errorf("coefficient at the leading term is zero"),
 	}
 
-	for _, tc := range testCases {
-		t.Run(tc.caseName, func(t *testing.T) {
-			res, err := quadratic.New(tc.coefs, tc.undefVar)
-			if res != nil {
-				t.Fatalf("unexpected creating equation")
-			}
-			if err.Error() != tc.expectedErr.Error() {
-				t.Errorf("got unexpected error. Expect: (%v), got: (%v)", tc.expectedErr, err)
-			}
-		})
+	res, err := quadratic.New(testCase.coefs, testCase.undefVar)
+	if res != nil {
+		t.Fatalf("unexpected creating equation")
+	}
+	if err.Error() != testCase.expectedErr.Error() {
+		t.Errorf("got unexpected error. Expect: (%v), got: (%v)", testCase.expectedErr, err)
 	}
 }
