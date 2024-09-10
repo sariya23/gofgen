@@ -62,7 +62,10 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 	}
 }
 
-func TestCreateNewQuadraticNegative(t *testing.T) {
+// TestCannotCreateQuadraticEquationWithZeroLeadTerm проверяет,
+// что квадратное уравнение не создаться, если коэффициент при старшем
+// члене 0.
+func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 	testCases := []struct {
 		caseName    string
 		coefs       [3]float64
