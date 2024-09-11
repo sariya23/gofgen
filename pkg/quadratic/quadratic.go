@@ -33,20 +33,17 @@ func isLeadTermIsZero(coefficient [3]decimal.Decimal) bool {
 
 func (qe QuadraticEquation) String() string {
 	stringEquation := fmt.Sprintf("%v%v²", qe.A.String(), qe.UndefinedVariable)
-
-	if qe.B.Compare(decimal.NewFromFloat(0.0)) == -1 {
-		v := strings.Replace(qe.B.String(), "-", "- ", 1)
-		stringEquation += fmt.Sprintf(" %v%v", v, qe.UndefinedVariable)
-	} else if qe.B.Compare(decimal.NewFromFloat(0.0)) == 1 {
-		stringEquation += fmt.Sprintf(" + %v%v", qe.B.String(), qe.UndefinedVariable)
-	}
-
-	if qe.C.Compare(decimal.NewFromFloat(0.0)) == -1 {
-		v := strings.Replace(qe.C.String(), "-", "- ", 1)
-		stringEquation += fmt.Sprintf(" %v", v)
-	} else if qe.C.Compare(decimal.NewFromFloat(0.0)) == 1 {
-		stringEquation += fmt.Sprintf(" + %v", qe.C.String())
-	}
-
+	stringEquation += fmt.Sprintf("%v%v", parseCoefficient(qe.B), qe.UndefinedVariable)
+	stringEquation += parseCoefficient(qe.C)
 	return fmt.Sprintf("%v = 0", stringEquation)
+}
+
+func parseCoefficient(d decimal.Decimal) string {
+	var result string
+	if d.Compare(decimal.NewFromFloat(0.0)) == -1 {
+		result = strings.ReplaceAll(d.String(), "-", " - ")
+	} else if d.Compare(decimal.NewFromFloat(0.0)) >= 0 {
+		result = fmt.Sprintf(" + %v", d.String())
+	}
+	return result
 }
