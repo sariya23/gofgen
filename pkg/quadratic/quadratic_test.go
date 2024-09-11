@@ -31,7 +31,6 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 				B:                 decimal.NewFromFloat(2.0),
 				C:                 decimal.NewFromFloat(0),
 				UndefinedVariable: "x",
-				Answer:            decimal.NewFromFloat(4.5),
 			},
 		},
 		{
@@ -44,14 +43,13 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 				B:                 decimal.NewFromFloat(1.1),
 				C:                 decimal.NewFromFloat(-90.2),
 				UndefinedVariable: "x",
-				Answer:            decimal.NewFromFloat(-5.6),
 			},
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.caseName, func(t *testing.T) {
-			res, err := quadratic.New(tc.coefs, tc.answer, tc.undefVar)
+			res, err := quadratic.New(tc.coefs, tc.undefVar)
 			if err != nil {
 				t.Errorf("got unexpected error: (%v)", err)
 			}
@@ -72,7 +70,6 @@ func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 	testCase := struct {
 		caseName    string
 		coefs       [3]float64
-		answer      float64
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
 		expectedErr error
@@ -82,7 +79,7 @@ func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 		expectedErr: fmt.Errorf("coefficient at the leading term is zero"),
 	}
 
-	res, err := quadratic.New(testCase.coefs, testCase.answer, testCase.undefVar)
+	res, err := quadratic.New(testCase.coefs, testCase.undefVar)
 	if res != nil {
 		t.Fatalf("unexpected creating equation")
 	}
@@ -96,14 +93,14 @@ func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 //
 // - между знаками и значениеями стоит проблел;
 //
-// - у страшего члена и ответа не должно быть пробела между знаком и значением;
+// - у страшего члена не должно быть пробела между знаком и значением;
 //
 // - если значение коэффициента n.0, то дробная часть не должна отображаться.
 //
 // - если значение у коэфициента при среднем члене или у свободного члена 0,
-// то он не должен отображться. Если ответ равен нулю, то он отображается;
+// то он не должен отображться;
 //
-// - если страшый член или ответ положительный, то знак + не отображается.
+// - если коэффициент при страшем члене положительный, то знак + не отображается.
 func TestShowEquationAsString(t *testing.T) {
 	testCases := []struct {
 		caseName            string
@@ -115,57 +112,50 @@ func TestShowEquationAsString(t *testing.T) {
 		{
 			caseName:            "all coefficients are postitive",
 			equationCoefficient: [3]float64{2.0, 23.0, 5.8},
-			answer:              5.6,
 			undefinedVariable:   "z",
-			expectedString:      "2z² + 23z + 5.8 = 5.6",
+			expectedString:      "2z² + 23z + 5.8 = 0",
 		},
 		{
 			caseName:            "all coefficient are negative",
 			equationCoefficient: [3]float64{-2.0, -23.0, -5.8},
-			answer:              -95.45,
 			undefinedVariable:   "x",
-			expectedString:      "-2x² - 23x - 5.8 = -95.45",
+			expectedString:      "-2x² - 23x - 5.8 = 0",
 		},
 		{
 			caseName:            "zero answer",
 			equationCoefficient: [3]float64{2.5, 2, 5},
-			answer:              0,
 			undefinedVariable:   "x",
 			expectedString:      "2.5x² + 2x + 5 = 0",
 		},
 		{
 			caseName:            "zero second coefficient",
 			equationCoefficient: [3]float64{2, 0, 5},
-			answer:              4.5,
 			undefinedVariable:   "qwe",
-			expectedString:      "2qwe² + 5 = 4.5",
+			expectedString:      "2qwe² + 5 = 0",
 		},
 		{
 			caseName:            "zero free term",
 			equationCoefficient: [3]float64{3.4, 5, 0},
-			answer:              4,
 			undefinedVariable:   "x",
-			expectedString:      "3.4x² + 5x = 4",
+			expectedString:      "3.4x² + 5x = 0",
 		},
 		{
 			caseName:            "zero second and free term",
 			equationCoefficient: [3]float64{2, 0, 0},
-			answer:              5,
 			undefinedVariable:   "x",
-			expectedString:      "2x² = 5",
+			expectedString:      "2x² = 0",
 		},
 		{
 			caseName:            "combination of positive and negative terms",
 			equationCoefficient: [3]float64{-2.01, 10.81273871263879, 2},
-			answer:              5.678,
 			undefinedVariable:   "x",
-			expectedString:      "-2.01x² + 10.81273871263879x + 2 = 5.678",
+			expectedString:      "-2.01x² + 10.81273871263879x + 2 = 0",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.caseName, func(t *testing.T) {
-			eq, err := quadratic.New(tc.equationCoefficient, tc.answer, tc.undefinedVariable)
+			eq, err := quadratic.New(tc.equationCoefficient, tc.undefinedVariable)
 			if err != nil {
 				t.Fatalf("unexpected error: (%v)", err)
 			}

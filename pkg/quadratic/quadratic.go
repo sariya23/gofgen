@@ -18,11 +18,11 @@ import (
 //
 // - UndefinedVariable - название неизвестной переменной. Например, x.
 type QuadraticEquation struct {
-	A, B, C, Answer   decimal.Decimal
+	A, B, C           decimal.Decimal
 	UndefinedVariable string
 }
 
-func New(coefficient [3]float64, answer float64, undefinedVariable string) (*QuadraticEquation, error) {
+func New(coefficient [3]float64, undefinedVariable string) (*QuadraticEquation, error) {
 	coeff := [...]decimal.Decimal{decimal.NewFromFloat(0), decimal.NewFromFloat(0), decimal.NewFromFloat(0)}
 	for i := 0; i < 3; i++ {
 		d := decimal.NewFromFloat(coefficient[i])
@@ -33,7 +33,7 @@ func New(coefficient [3]float64, answer float64, undefinedVariable string) (*Qua
 		return nil, fmt.Errorf("coefficient at the leading term is zero")
 	}
 
-	return &QuadraticEquation{A: coeff[0], B: coeff[1], C: coeff[2], Answer: decimal.NewFromFloat(answer), UndefinedVariable: undefinedVariable}, nil
+	return &QuadraticEquation{A: coeff[0], B: coeff[1], C: coeff[2], UndefinedVariable: undefinedVariable}, nil
 }
 
 func isLeadTermIsZero(coefficient [3]decimal.Decimal) bool {
@@ -50,7 +50,7 @@ func (qe QuadraticEquation) String() string {
 	if qe.C.Compare(decimal.NewFromFloat(0.0)) != 0 {
 		stringEquation += parseCoefficient(qe.C)
 	}
-	return fmt.Sprintf("%v = %v", stringEquation, qe.Answer)
+	return fmt.Sprintf("%v = 0", stringEquation)
 }
 
 func parseCoefficient(d decimal.Decimal) string {
