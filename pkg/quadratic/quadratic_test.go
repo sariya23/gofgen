@@ -124,6 +124,13 @@ func TestShowEquationAsString(t *testing.T) {
 			undefinedVariable:   "x",
 			expectedString:      "-2x² - 23x - 5.8 = -95.45",
 		},
+		{
+			caseName:            "zero answer",
+			equationCoefficient: [3]float64{2.5, 2, 5},
+			answer:              0,
+			undefinedVariable:   "x",
+			expectedString:      "2.5x² + 2x + 5 = 0",
+		},
 	}
 
 	for _, tc := range testCases {
