@@ -36,7 +36,9 @@ func (qe QuadraticEquation) String() string {
 	if qe.B.Compare(decimal.NewFromFloat(0.0)) != 0 {
 		stringEquation += fmt.Sprintf("%v%v", parseCoefficient(qe.B), qe.UndefinedVariable)
 	}
-	stringEquation += parseCoefficient(qe.C)
+	if qe.C.Compare(decimal.NewFromFloat(0.0)) != 0 {
+		stringEquation += parseCoefficient(qe.C)
+	}
 	return fmt.Sprintf("%v = %v", stringEquation, qe.Answer)
 }
 
