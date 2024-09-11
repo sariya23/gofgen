@@ -2,6 +2,7 @@ package quadratic
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -54,4 +55,24 @@ func parseCoefficient(v int) string {
 		result = fmt.Sprintf(" + %v", strconv.Itoa(v))
 	}
 	return result
+}
+
+// Solve решанет квадртаное уравнение.
+// Если дискриминант отрицательный - корней нет (nil);
+//
+// если дискриминант нулевой - один корень;
+//
+// если дискриминант положительный - два корня.
+func (qe QuadraticEquation) Solve() []int {
+	var roots []int
+	D := int(math.Pow(float64(qe.B), 2)) - 4*qe.A*qe.C
+	if D == 0 {
+		root := (-qe.B + int(math.Sqrt(float64(D)))) / (2 * qe.A)
+		roots = append(roots, root)
+	} else {
+		root1 := (-qe.B + int(math.Sqrt(float64(D)))) / (2 * qe.A)
+		root2 := (-qe.B - int(math.Sqrt(float64(D)))) / (2 * qe.A)
+		roots = append(roots, root1, root2)
+	}
+	return roots
 }
