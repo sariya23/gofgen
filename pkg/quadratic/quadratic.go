@@ -8,8 +8,7 @@ import (
 )
 
 type QuadraticEquation struct {
-	A, B, C           decimal.Decimal
-	Answer            decimal.Decimal
+	A, B, C, Answer   decimal.Decimal
 	UndefinedVariable string
 }
 
