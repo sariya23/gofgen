@@ -98,6 +98,12 @@ func TestShowEquationAsString(t *testing.T) {
 			undefinedVariable:   "z",
 			expectedString:      "2z² + 23z + 5.8 = 0",
 		},
+		{
+			caseName:            "all coefficient are negative",
+			equationCoefficient: [3]float64{-2.0, -23.0, -5.8},
+			undefinedVariable:   "x",
+			expectedString:      "-2x² - 23x - 5.8 = 0",
+		},
 	}
 
 	for _, tc := range testCases {

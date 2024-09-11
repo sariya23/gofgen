@@ -2,6 +2,7 @@ package quadratic
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/shopspring/decimal"
 )
@@ -34,13 +35,15 @@ func (qe QuadraticEquation) String() string {
 	stringEquation := fmt.Sprintf("%v%v²", qe.A.String(), qe.UndefinedVariable)
 
 	if qe.B.Compare(decimal.NewFromFloat(0.0)) == -1 {
-		stringEquation += fmt.Sprintf(" - %v%v", qe.B.String(), qe.UndefinedVariable)
+		v := strings.Replace(qe.B.String(), "-", "- ", 1)
+		stringEquation += fmt.Sprintf(" %v%v", v, qe.UndefinedVariable)
 	} else if qe.B.Compare(decimal.NewFromFloat(0.0)) == 1 {
 		stringEquation += fmt.Sprintf(" + %v%v", qe.B.String(), qe.UndefinedVariable)
 	}
 
 	if qe.C.Compare(decimal.NewFromFloat(0.0)) == -1 {
-		stringEquation += fmt.Sprintf(" - %v", qe.C.String())
+		v := strings.Replace(qe.C.String(), "-", "- ", 1)
+		stringEquation += fmt.Sprintf(" %v", v)
 	} else if qe.C.Compare(decimal.NewFromFloat(0.0)) == 1 {
 		stringEquation += fmt.Sprintf(" + %v", qe.C.String())
 	}
