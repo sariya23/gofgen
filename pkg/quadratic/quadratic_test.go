@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/shopspring/decimal"
 )
 
 // TestCreateNewEquationSuccess проверяет, что
@@ -15,7 +14,7 @@ import (
 func TestCreateNewEquationSuccess(t *testing.T) {
 	testCases := []struct {
 		caseName    string
-		coefs       [3]float64
+		coefs       [3]int
 		answer      float64
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
@@ -23,25 +22,24 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 	}{
 		{
 			caseName: "Success create with positive floats",
-			coefs:    [3]float64{2.1, 2.0, 0},
+			coefs:    [3]int{2, 2, 0},
 			undefVar: "x",
-			answer:   4.5,
 			expectedEq: &quadratic.QuadraticEquation{
-				A:                 decimal.NewFromFloat(2.1),
-				B:                 decimal.NewFromFloat(2.0),
-				C:                 decimal.NewFromFloat(0),
+				A:                 2,
+				B:                 2,
+				C:                 0,
 				UndefinedVariable: "x",
 			},
 		},
 		{
 			caseName: "success create with negative coefficient",
-			coefs:    [3]float64{123.90, 1.1, -90.2},
+			coefs:    [3]int{123, 1, -90},
 			undefVar: "x",
 			answer:   -5.6,
 			expectedEq: &quadratic.QuadraticEquation{
-				A:                 decimal.NewFromFloat(123.90),
-				B:                 decimal.NewFromFloat(1.1),
-				C:                 decimal.NewFromFloat(-90.2),
+				A:                 123,
+				B:                 1,
+				C:                 -90,
 				UndefinedVariable: "x",
 			},
 		},
@@ -69,12 +67,12 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 	testCase := struct {
 		caseName    string
-		coefs       [3]float64
+		coefs       [3]int
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
 		expectedErr error
 	}{
-		coefs:       [3]float64{0.0, -3.1, 4.9},
+		coefs:       [3]int{0.0, -3, 4},
 		undefVar:    "x",
 		expectedErr: fmt.Errorf("coefficient at the leading term is zero"),
 	}
@@ -104,52 +102,46 @@ func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 func TestShowEquationAsString(t *testing.T) {
 	testCases := []struct {
 		caseName            string
-		equationCoefficient [3]float64
+		equationCoefficient [3]int
 		answer              float64
 		undefinedVariable   string
 		expectedString      string
 	}{
 		{
 			caseName:            "all coefficients are postitive",
-			equationCoefficient: [3]float64{2.0, 23.0, 5.8},
+			equationCoefficient: [3]int{2, 23, 5},
 			undefinedVariable:   "z",
-			expectedString:      "2z² + 23z + 5.8 = 0",
+			expectedString:      "2z² + 23z + 5 = 0",
 		},
 		{
 			caseName:            "all coefficient are negative",
-			equationCoefficient: [3]float64{-2.0, -23.0, -5.8},
+			equationCoefficient: [3]int{-2, -23, -5},
 			undefinedVariable:   "x",
-			expectedString:      "-2x² - 23x - 5.8 = 0",
-		},
-		{
-			caseName:            "zero answer",
-			equationCoefficient: [3]float64{2.5, 2, 5},
-			undefinedVariable:   "x",
-			expectedString:      "2.5x² + 2x + 5 = 0",
+			expectedString:      "-2x² - 23x - 5 = 0",
 		},
 		{
 			caseName:            "zero second coefficient",
-			equationCoefficient: [3]float64{2, 0, 5},
+			equationCoefficient: [3]int{2, 0, 5},
 			undefinedVariable:   "qwe",
 			expectedString:      "2qwe² + 5 = 0",
 		},
 		{
 			caseName:            "zero free term",
-			equationCoefficient: [3]float64{3.4, 5, 0},
+			equationCoefficient: [3]int{3, 5, 0},
 			undefinedVariable:   "x",
-			expectedString:      "3.4x² + 5x = 0",
+			expectedString:      "3x² + 5x = 0",
 		},
 		{
 			caseName:            "zero second and free term",
-			equationCoefficient: [3]float64{2, 0, 0},
+			equationCoefficient: [3]int{2, 0, 0},
 			undefinedVariable:   "x",
 			expectedString:      "2x² = 0",
 		},
 		{
 			caseName:            "combination of positive and negative terms",
-			equationCoefficient: [3]float64{-2.01, 10.81273871263879, 2},
+			equationCoefficient: [3]int{-2, 10, 2},
 			undefinedVariable:   "x",
-			expectedString:      "-2.01x² + 10.81273871263879x + 2 = 0",
+			expectedString:      "-2x² + 10x + 2 = 0",
 		},
 	}
 
