@@ -33,7 +33,9 @@ func isLeadTermIsZero(coefficient [3]decimal.Decimal) bool {
 
 func (qe QuadraticEquation) String() string {
 	stringEquation := fmt.Sprintf("%v%v²", qe.A.String(), qe.UndefinedVariable)
-	stringEquation += fmt.Sprintf("%v%v", parseCoefficient(qe.B), qe.UndefinedVariable)
+	if qe.B.Compare(decimal.NewFromFloat(0.0)) != 0 {
+		stringEquation += fmt.Sprintf("%v%v", parseCoefficient(qe.B), qe.UndefinedVariable)
+	}
 	stringEquation += parseCoefficient(qe.C)
 	return fmt.Sprintf("%v = %v", stringEquation, qe.Answer)
 }
