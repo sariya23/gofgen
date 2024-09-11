@@ -147,6 +147,13 @@ func TestShowEquationAsString(t *testing.T) {
 			undefinedVariable:   "x",
 			expectedString:      "3.4x² + 5x = 4",
 		},
+		{
+			caseName:            "zero second and free term",
+			equationCoefficient: [3]float64{2, 0, 0},
+			answer:              5,
+			undefinedVariable:   "x",
+			expectedString:      "2x² = 5",
+		},
 	}
 
 	for _, tc := range testCases {
