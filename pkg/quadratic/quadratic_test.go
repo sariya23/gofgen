@@ -154,6 +154,13 @@ func TestShowEquationAsString(t *testing.T) {
 			undefinedVariable:   "x",
 			expectedString:      "2x² = 5",
 		},
+		{
+			caseName:            "combination of positive and negative terms",
+			equationCoefficient: [3]float64{-2.01, 10.81273871263879, 2},
+			answer:              5.678,
+			undefinedVariable:   "x",
+			expectedString:      "-2.01x² + 10.81273871263879x + 2 = 5.678",
+		},
 	}
 
 	for _, tc := range testCases {
