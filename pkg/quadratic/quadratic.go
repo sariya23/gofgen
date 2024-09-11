@@ -29,3 +29,21 @@ func New(coefficient [3]float64, undefinedVariable string) (*QuadraticEquation, 
 func isLeadTermIsZero(coefficient [3]decimal.Decimal) bool {
 	return coefficient[0].Equal(decimal.NewFromFloat(0))
 }
+
+func (qe QuadraticEquation) String() string {
+	stringEquation := fmt.Sprintf("%v%v²", qe.A.String(), qe.UndefinedVariable)
+
+	if qe.B.Compare(decimal.NewFromFloat(0.0)) == -1 {
+		stringEquation += fmt.Sprintf(" - %v%v", qe.B.String(), qe.UndefinedVariable)
+	} else if qe.B.Compare(decimal.NewFromFloat(0.0)) == 1 {
+		stringEquation += fmt.Sprintf(" + %v%v", qe.B.String(), qe.UndefinedVariable)
+	}
+
+	if qe.C.Compare(decimal.NewFromFloat(0.0)) == -1 {
+		stringEquation += fmt.Sprintf(" - %v", qe.C.String())
+	} else if qe.C.Compare(decimal.NewFromFloat(0.0)) == 1 {
+		stringEquation += fmt.Sprintf(" + %v", qe.C.String())
+	}
+
+	return fmt.Sprintf("%v = 0", stringEquation)
+}

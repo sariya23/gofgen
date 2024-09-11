@@ -2,7 +2,7 @@ package quadratic_test
 
 import (
 	"fmt"
-	"gofgen/internal/quadratic"
+	"gofgen/pkg/quadratic"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -82,5 +82,34 @@ func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 	}
 	if err.Error() != testCase.expectedErr.Error() {
 		t.Errorf("got unexpected error. Expect: (%v), got: (%v)", testCase.expectedErr, err)
+	}
+}
+
+func TestShowEquationAsString(t *testing.T) {
+	testCases := []struct {
+		caseName            string
+		equationCoefficient [3]float64
+		undefinedVariable   string
+		expectedString      string
+	}{
+		{
+			caseName:            "all coefficients are postitive",
+			equationCoefficient: [3]float64{2.0, 23.0, 5.8},
+			undefinedVariable:   "z",
+			expectedString:      "2z² + 23z + 5.8 = 0",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.caseName, func(t *testing.T) {
+			eq, err := quadratic.New(tc.equationCoefficient, tc.undefinedVariable)
+			if err != nil {
+				t.Fatalf("unexpected error: (%v)", err)
+			}
+			res := eq.String()
+			if diff := cmp.Diff(res, tc.expectedString); diff != "" {
+				t.Error(diff)
+			}
+		})
 	}
 }
