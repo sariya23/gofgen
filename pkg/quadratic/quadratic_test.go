@@ -159,44 +159,44 @@ func TestShowEquationAsString(t *testing.T) {
 
 // TestSolveQuadraticEquation проверяет,
 // что квадратное уравнение решается верно.
-// func TestSolveQuadraticEquation(t *testing.T) {
-// 	testCases := []struct {
-// 		caseName            string
-// 		equationCoefficient [3]decimal.Decimal
-// 		roots               []decimal.Decimal
-// 	}{
-// 		{
-// 			caseName:            "No roots - nil",
-// 			equationCoefficient: [...]decimal.Decimal{2, -1, 1},
-// 			roots:               nil,
-// 		},
-// 		{
-// 			caseName:            "Two roots",
-// 			equationCoefficient: [...]decimal.Decimal{1, -4, -5},
-// 			roots:               []decimal.Decimal{-1, 5},
-// 		},
-// 		{
-// 			caseName:            "One root",
-// 			equationCoefficient: [...]decimal.Decimal{1, -2, 1},
-// 			roots:               []decimal.Decimal{1},
-// 		},
-// 		{
-// 			caseName:            "Two roots. Decimal",
-// 			equationCoefficient: [3]decimal.Decimal{3, 5, 2},
-// 			roots:               []decimal.Decimal{5.0 / 6.0, 1.0 / 2.0},
-// 		},
-// 	}
-// 	for _, tc := range testCases {
-// 		t.Run(tc.caseName, func(t *testing.T) {
-// 			eq, err := quadratic.New(tc.equationCoefficient, "x")
-// 			if err != nil {
-// 				t.Fatalf("unexpected err: (%v)", err)
-// 			}
-// 			res := eq.Solve()
-// 			fmt.Println(res)
-// 			if diff := cmp.Diff(res, tc.roots); diff != "" {
-// 				t.Error(diff)
-// 			}
-// 		})
-// 	}
-// }
+func TestSolveQuadraticEquation(t *testing.T) {
+	testCases := []struct {
+		caseName            string
+		equationCoefficient [3]float64
+		roots               []decimal.Decimal
+	}{
+		{
+			caseName:            "No roots - nil",
+			equationCoefficient: [...]float64{2, -1, 1},
+			roots:               nil,
+		},
+		{
+			caseName:            "Two roots",
+			equationCoefficient: [...]float64{1, -4, -5},
+			roots:               []decimal.Decimal{decimal.NewFromInt(-1), decimal.NewFromInt(5)},
+		},
+		{
+			caseName:            "One root",
+			equationCoefficient: [...]float64{1, -2, 1},
+			roots:               []decimal.Decimal{decimal.NewFromInt(1)},
+		},
+		{
+			caseName:            "One Decimal root",
+			equationCoefficient: [3]float64{-4, 28, -49},
+			roots:               []decimal.Decimal{decimal.NewFromFloat(3.5)},
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.caseName, func(t *testing.T) {
+			eq, err := quadratic.New(tc.equationCoefficient, "x")
+			if err != nil {
+				t.Fatalf("unexpected err: (%v)", err)
+			}
+			res := eq.Solve()
+			fmt.Println(res)
+			if diff := cmp.Diff(res, tc.roots); diff != "" {
+				t.Error(diff)
+			}
+		})
+	}
+}

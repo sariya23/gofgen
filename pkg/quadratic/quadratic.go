@@ -2,6 +2,7 @@ package quadratic
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/shopspring/decimal"
@@ -59,26 +60,32 @@ func parseCoefficient(v decimal.Decimal) string {
 }
 
 // Solve решанет квадртаное уравнение. В случае, когда корня два,
-// возвращает их в порядке возрастания.
+// возвращает их в порядке возрастания. Округляет до 2х знаков после запятой.
 //
 // Если дискриминант отрицательный - корней нет (nil);
 //
 // если дискриминант нулевой - один корень;
 //
 // если дискриминант положительный - два корня.
-// func (qe QuadraticEquation) Solve() []float64 {
-// 	var roots []float64
-// 	D := math.Pow(float64(qe.B), 2) - 4*qe.A*qe.C
-// 	if D == 0 {
-// 		root := (-qe.B + math.Sqrt(float64(D))) / (2 * qe.A)
-// 		roots = append(roots, root)
-// 	} else if D > 0 {
-// 		root1 := (-qe.B + math.Sqrt(float64(D))) / (2 * qe.A)
-// 		root2 := (-qe.B - math.Sqrt(float64(D))) / (2 * qe.A)
-// 		roots = append(roots, root1, root2)
-// 		slices.Sort(roots)
-// 	} else {
-// 		roots = nil
-// 	}
-// 	return roots
-// }
+func (qe QuadraticEquation) Solve() []decimal.Decimal {
+	var roots []decimal.Decimal
+	doubleA := decimal.NewFromInt(2).Mul(qe.A)
+	D := qe.B.Pow(decimal.NewFromInt(2)).Sub(decimal.NewFromInt(4).Mul(qe.A).Mul(qe.C))
+	if D.IsZero() {
+		root := (qe.B.Neg()).Div(doubleA)
+		roots = append(roots, root)
+	} else if D.IsPositive() {
+		f, _ := D.Float64()
+		DRoot := decimal.NewFromFloat(math.Sqrt(f))
+		root1 := (qe.B.Neg().Add(DRoot)).Div(doubleA)
+		root2 := (qe.B.Neg().Sub(DRoot)).Div(doubleA)
+		if root1.GreaterThan(root2) {
+			roots = append(roots, root2, root1)
+		} else {
+			roots = append(roots, root1, root2)
+		}
+	} else {
+		roots = nil
+	}
+	return roots
+}
