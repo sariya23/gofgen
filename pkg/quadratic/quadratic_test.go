@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/shopspring/decimal"
 )
 
 // TestCreateNewEquationSuccess проверяет, что
@@ -15,7 +16,6 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 	testCases := []struct {
 		caseName    string
 		coefs       [3]float64
-		answer      float64
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
 		expectedErr error
@@ -25,9 +25,9 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 			coefs:    [3]float64{2, 2, 0},
 			undefVar: "x",
 			expectedEq: &quadratic.QuadraticEquation{
-				A:                 2,
-				B:                 2,
-				C:                 0,
+				A:                 decimal.NewFromInt(2),
+				B:                 decimal.NewFromInt(2),
+				C:                 decimal.NewFromInt(0),
 				UndefinedVariable: "x",
 			},
 		},
@@ -35,11 +35,10 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 			caseName: "success create with negative coefficient",
 			coefs:    [3]float64{123, 1, -90},
 			undefVar: "x",
-			answer:   -5.6,
 			expectedEq: &quadratic.QuadraticEquation{
-				A:                 123,
-				B:                 1,
-				C:                 -90,
+				A:                 decimal.NewFromInt(123),
+				B:                 decimal.NewFromInt(1),
+				C:                 decimal.NewFromInt(-90),
 				UndefinedVariable: "x",
 			},
 		},
@@ -72,7 +71,7 @@ func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 		expectedEq  *quadratic.QuadraticEquation
 		expectedErr error
 	}{
-		coefs:       [3]float64{0.0, -3, 4},
+		coefs:       [3]float64{0, -3, 4},
 		undefVar:    "x",
 		expectedErr: fmt.Errorf("coefficient at the leading term is zero"),
 	}
@@ -103,7 +102,6 @@ func TestShowEquationAsString(t *testing.T) {
 	testCases := []struct {
 		caseName            string
 		equationCoefficient [3]float64
-		answer              float64
 		undefinedVariable   string
 		expectedString      string
 	}{
@@ -158,3 +156,47 @@ func TestShowEquationAsString(t *testing.T) {
 		})
 	}
 }
+
+// TestSolveQuadraticEquation проверяет,
+// что квадратное уравнение решается верно.
+// func TestSolveQuadraticEquation(t *testing.T) {
+// 	testCases := []struct {
+// 		caseName            string
+// 		equationCoefficient [3]decimal.Decimal
+// 		roots               []decimal.Decimal
+// 	}{
+// 		{
+// 			caseName:            "No roots - nil",
+// 			equationCoefficient: [...]decimal.Decimal{2, -1, 1},
+// 			roots:               nil,
+// 		},
+// 		{
+// 			caseName:            "Two roots",
+// 			equationCoefficient: [...]decimal.Decimal{1, -4, -5},
+// 			roots:               []decimal.Decimal{-1, 5},
+// 		},
+// 		{
+// 			caseName:            "One root",
+// 			equationCoefficient: [...]decimal.Decimal{1, -2, 1},
+// 			roots:               []decimal.Decimal{1},
+// 		},
+// 		{
+// 			caseName:            "Two roots. Decimal",
+// 			equationCoefficient: [3]decimal.Decimal{3, 5, 2},
+// 			roots:               []decimal.Decimal{5.0 / 6.0, 1.0 / 2.0},
+// 		},
+// 	}
+// 	for _, tc := range testCases {
+// 		t.Run(tc.caseName, func(t *testing.T) {
+// 			eq, err := quadratic.New(tc.equationCoefficient, "x")
+// 			if err != nil {
+// 				t.Fatalf("unexpected err: (%v)", err)
+// 			}
+// 			res := eq.Solve()
+// 			fmt.Println(res)
+// 			if diff := cmp.Diff(res, tc.roots); diff != "" {
+// 				t.Error(diff)
+// 			}
+// 		})
+// 	}
+// }
