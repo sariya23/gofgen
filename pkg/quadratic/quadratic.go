@@ -3,7 +3,6 @@ package quadratic
 import (
 	"fmt"
 	"math"
-	"strconv"
 	"strings"
 )
 
@@ -18,11 +17,11 @@ import (
 //
 // - UndefinedVariable - название неизвестной переменной. Например, x.
 type QuadraticEquation struct {
-	A, B, C           int
+	A, B, C           float64
 	UndefinedVariable string
 }
 
-func New(coefficient [3]int, undefinedVariable string) (*QuadraticEquation, error) {
+func New(coefficient [3]float64, undefinedVariable string) (*QuadraticEquation, error) {
 	if isLeadTermIsZero(coefficient) {
 		return nil, fmt.Errorf("coefficient at the leading term is zero")
 	}
@@ -30,14 +29,14 @@ func New(coefficient [3]int, undefinedVariable string) (*QuadraticEquation, erro
 	return &QuadraticEquation{A: coefficient[0], B: coefficient[1], C: coefficient[2], UndefinedVariable: undefinedVariable}, nil
 }
 
-func isLeadTermIsZero(coefficient [3]int) bool {
+func isLeadTermIsZero(coefficient [3]float64) bool {
 	return coefficient[0] == 0
 }
 
 // String возвращает сторокове представление квадратного уравнения.
 // Например, 3.4x² + 5x = 4.
 func (qe QuadraticEquation) String() string {
-	stringEquation := fmt.Sprintf("%v%v²", strconv.Itoa(qe.A), qe.UndefinedVariable)
+	stringEquation := fmt.Sprintf("%v%v²", qe.A, qe.UndefinedVariable)
 	if qe.B != 0 {
 		stringEquation += fmt.Sprintf("%v%v", parseCoefficient(qe.B), qe.UndefinedVariable)
 	}
@@ -47,12 +46,12 @@ func (qe QuadraticEquation) String() string {
 	return fmt.Sprintf("%v = 0", stringEquation)
 }
 
-func parseCoefficient(v int) string {
+func parseCoefficient(v float64) string {
 	var result string
 	if v < 0 {
-		result = strings.ReplaceAll(strconv.Itoa(v), "-", " - ")
+		result = strings.ReplaceAll(fmt.Sprintf("%v", v), "-", " - ")
 	} else if v >= 0 {
-		result = fmt.Sprintf(" + %v", strconv.Itoa(v))
+		result = fmt.Sprintf(" + %v", fmt.Sprintf("%v", v))
 	}
 	return result
 }
@@ -63,15 +62,15 @@ func parseCoefficient(v int) string {
 // если дискриминант нулевой - один корень;
 //
 // если дискриминант положительный - два корня.
-func (qe QuadraticEquation) Solve() []int {
-	var roots []int
-	D := int(math.Pow(float64(qe.B), 2)) - 4*qe.A*qe.C
+func (qe QuadraticEquation) Solve() []float64 {
+	var roots []float64
+	D := math.Pow(float64(qe.B), 2) - 4*qe.A*qe.C
 	if D == 0 {
-		root := (-qe.B + int(math.Sqrt(float64(D)))) / (2 * qe.A)
+		root := (-qe.B + math.Sqrt(float64(D))) / (2 * qe.A)
 		roots = append(roots, root)
 	} else {
-		root1 := (-qe.B + int(math.Sqrt(float64(D)))) / (2 * qe.A)
-		root2 := (-qe.B - int(math.Sqrt(float64(D)))) / (2 * qe.A)
+		root1 := (-qe.B + math.Sqrt(float64(D))) / (2 * qe.A)
+		root2 := (-qe.B - math.Sqrt(float64(D))) / (2 * qe.A)
 		roots = append(roots, root1, root2)
 	}
 	return roots

@@ -14,7 +14,7 @@ import (
 func TestCreateNewEquationSuccess(t *testing.T) {
 	testCases := []struct {
 		caseName    string
-		coefs       [3]int
+		coefs       [3]float64
 		answer      float64
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
@@ -22,7 +22,7 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 	}{
 		{
 			caseName: "Success create with positive floats",
-			coefs:    [3]int{2, 2, 0},
+			coefs:    [3]float64{2, 2, 0},
 			undefVar: "x",
 			expectedEq: &quadratic.QuadraticEquation{
 				A:                 2,
@@ -33,7 +33,7 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 		},
 		{
 			caseName: "success create with negative coefficient",
-			coefs:    [3]int{123, 1, -90},
+			coefs:    [3]float64{123, 1, -90},
 			undefVar: "x",
 			answer:   -5.6,
 			expectedEq: &quadratic.QuadraticEquation{
@@ -67,12 +67,12 @@ func TestCreateNewEquationSuccess(t *testing.T) {
 func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 	testCase := struct {
 		caseName    string
-		coefs       [3]int
+		coefs       [3]float64
 		undefVar    string
 		expectedEq  *quadratic.QuadraticEquation
 		expectedErr error
 	}{
-		coefs:       [3]int{0.0, -3, 4},
+		coefs:       [3]float64{0.0, -3, 4},
 		undefVar:    "x",
 		expectedErr: fmt.Errorf("coefficient at the leading term is zero"),
 	}
@@ -102,44 +102,44 @@ func TestCannotCreateQuadraticEquationWithZeroLeadTerm(t *testing.T) {
 func TestShowEquationAsString(t *testing.T) {
 	testCases := []struct {
 		caseName            string
-		equationCoefficient [3]int
+		equationCoefficient [3]float64
 		answer              float64
 		undefinedVariable   string
 		expectedString      string
 	}{
 		{
 			caseName:            "all coefficients are postitive",
-			equationCoefficient: [3]int{2, 23, 5},
+			equationCoefficient: [3]float64{2, 23, 5},
 			undefinedVariable:   "z",
 			expectedString:      "2z² + 23z + 5 = 0",
 		},
 		{
 			caseName:            "all coefficient are negative",
-			equationCoefficient: [3]int{-2, -23, -5},
+			equationCoefficient: [3]float64{-2, -23, -5},
 			undefinedVariable:   "x",
 			expectedString:      "-2x² - 23x - 5 = 0",
 		},
 		{
 			caseName:            "zero second coefficient",
-			equationCoefficient: [3]int{2, 0, 5},
+			equationCoefficient: [3]float64{2, 0, 5},
 			undefinedVariable:   "qwe",
 			expectedString:      "2qwe² + 5 = 0",
 		},
 		{
 			caseName:            "zero free term",
-			equationCoefficient: [3]int{3, 5, 0},
+			equationCoefficient: [3]float64{3, 5, 0},
 			undefinedVariable:   "x",
 			expectedString:      "3x² + 5x = 0",
 		},
 		{
 			caseName:            "zero second and free term",
-			equationCoefficient: [3]int{2, 0, 0},
+			equationCoefficient: [3]float64{2, 0, 0},
 			undefinedVariable:   "x",
 			expectedString:      "2x² = 0",
 		},
 		{
 			caseName:            "combination of positive and negative terms",
-			equationCoefficient: [3]int{-2, 10, 2},
+			equationCoefficient: [3]float64{-2, 10, 2},
 			undefinedVariable:   "x",
 			expectedString:      "-2x² + 10x + 2 = 0",
 		},
